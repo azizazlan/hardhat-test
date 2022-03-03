@@ -112,6 +112,14 @@ Another unit test but this time utilising MockV3Aggregator smart contract. To te
 npx hardhat test --grep "MyMock"
 ```
 
+## Test coverage
+
+For example, run only the tests in the unit test, do:
+
+```sh
+npx hardhat coverage --testfiles "test/unit/*.ts"
+```
+
 That's it! Yep it is all about testing!
 
 [##](##) Credits
