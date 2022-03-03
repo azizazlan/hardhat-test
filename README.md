@@ -86,11 +86,11 @@ const transaction = await smartContractInstance.requestRandomWords();
 await new Promise((resolve) => setTimeout(resolve, 300000)); // 5 minutes
 ```
 
-I ran the test for 3 times. The first two tests were to request `requestRandomWords`. I did twice because I thought something went wrong but actually the request just took a little longer than 3 minutes. Being impatient, I run another (second) test and I did have to wait for about 5 minutes!
+I ran the test for 3 times. The first two tests were to request `requestRandomWords`. I did twice because I thought something went wrong but actually the request just took a little longer than 3 minutes. Being impatient and not knowing the transaction was in the Pending state, I continue to run another (second) test. This time I have to wait for about 5 minutes!
 
-You may monitor the request at the Subscription Manager [page](https://vrf.chain.link/). It should display in "Pending" section.
+You should monitor the request(s) in the Subscription Manager [page](https://vrf.chain.link/). The pending transactions should be displayed in the "Pending" section.
 
-Once the requests ( in my case two of them ) have been successfully transacted. I commented the two lines above and run the test with the following lines:
+Once the requests ( in my case two of them ) have been successfully transacted. I ran the (third)test again with the following lines commented:
 
 ```javascript
 //const transaction = await smartContractInstance.requestRandomWords();
@@ -111,6 +111,8 @@ Another unit test but this time utilising MockV3Aggregator smart contract. To te
 ```sh
 npx hardhat test --grep "MyMock"
 ```
+
+That's it! Yep it is all about testing!
 
 [##](##) Credits
 
