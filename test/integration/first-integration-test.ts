@@ -4,7 +4,7 @@ chai.use(solidity);
 import { ethers } from 'hardhat';
 import { MyFirstIntegratedContract } from '../../typechain';
 
-describe('MyFirstIntegration integration test', function () {
+describe('MyFirstIntegration', function () {
   let contractInstance: MyFirstIntegratedContract;
 
   before(async function () {

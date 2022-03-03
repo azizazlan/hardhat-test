@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import { NotMyFirstContract } from '../../typechain';
 
-describe('NotMyFirstContract unit test', function () {
+describe('NotMyFirstContract', function () {
   let notMyFirstContract: NotMyFirstContract;
 
   before(async function () {

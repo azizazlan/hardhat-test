@@ -12,39 +12,54 @@ This hardhat test project is similar to Harry's repo https://github.com/pappas99
 
 ## 🚀 Usage
 
+Clone this repo, then do:
+
 ```sh
 npm install
 ```
 
-```sh
-npx hardhat test
+## Test 1
+
+A simple and straight forward test against NotMyFirstContract.sol. (Sorry, the contract name is meant to be a joke). To run this test do:
+
+```[sh](sh)
+npx hardhat test --grep "NotMyFirstContract"
 ```
 
-If you want to run only one test for example, the integration test on the "Kovan" network, then run:
+## Test 2
+
+This is an integration test between MyFirstIntegratedContract and AggregatorV3Interface smart contracts.
+
+Before run the test, make sure the the `KOVAN_URL` is configured in the .env file.
+
+To run the test do:
 
 ```sh
-npx hardhat test test/integration/index.ts --network kovan
+npx hardhat test --grep "MyFirstIntegration" --network kovan
 ```
+
+## Test 3
+
+This is a test that uses Chainlink VRF. I strongly suggest you read [this](https://docs.chain.link/docs/chainlink-vrf/) first.
 
 Make sure you have the Chainlink's subscription id before VRFv2Consumer smart contract can be deployed. The subscription id is set in the `scripts/deploy-VRFv2Consumer.ts` file.
 
 Also make sure you configure the `RINKEBY_URL` and `RINKEBY_PRIVATE_KEY` in the .env file.
 
-Then run the command below to deploy the smart contract:
+Then run the command below to deploy the VRFv2Consumer smart contract:
 
 ```sh
 npx hardhat run --network rinkeby scripts/deploy-VRFv2Consumer.ts
 ```
 
-Once deployed, the script should display the address, for example:
+Once the contract is deployed, the script should display its address in the terminal, for example:
 
 ```
 VRFv2Consumer deployed to: 0xec06C0e1277479641CB48d27a124a0F041bA5bE5
 ```
 
-Then in the Subscription Manager page, add a consumer using the smart contract address above.
-
-Then in the `test/integration/VRFConsumer.ts`, substitute your contract address. For example:
+Then in the Subscription Manager [page](https://vrf.chain.link/), add a consumer using the smart contract address above.
+Then edit the `test/integration/vrfconsumer-test.ts` to substitute your contract address for the input paramater of the "attach" function like below.
 
 ```javascript
 let smartContractInstance: VRFv2Consumer;
@@ -58,15 +73,46 @@ beforeEach(async function () {
 });
 ```
 
-Then run the ([VRFv2Consumer](VRFv2Consumer)) test:
+Then run the test:
 
 ```sh
-npx hardhat --network rinkeby test test/integration/VRFConsumer.ts
+npx hardhat test --grep "VRFv2Consumer" --network rinkeby
 ```
 
-You may monitor the request at the Subscription Manager [page](https://vrf.chain.link/)
+Make sure you uncomment the following lines in the test/integration/vrfconsumer-test.ts file:
 
-## Credits
+```javascript
+const transaction = await smartContractInstance.requestRandomWords();
+await new Promise((resolve) => setTimeout(resolve, 300000)); // 5 minutes
+```
+
+I ran the test for 3 times. The first two tests were to request `requestRandomWords`. I did twice because I thought something went wrong but actually the request just took a little longer than 3 minutes. Being impatient, I run another (second) test and I did have to wait for about 5 minutes!
+
+You may monitor the request at the Subscription Manager [page](https://vrf.chain.link/). It should display in "Pending" section.
+
+Once the requests ( in my case two of them ) have been successfully transacted. I commented the two lines above and run the test with the following lines:
+
+```javascript
+//const transaction = await smartContractInstance.requestRandomWords();
+//await new Promise((resolve) => setTimeout(resolve, 300000)); // 5 minutes
+
+const result0 = await smartContractInstance.s_randomWords(0); // two requestRandomWords, so index 0 and 1
+console.log(result0);
+const result1 = await smartContractInstance.s_randomWords(1);
+console.log(result1);
+```
+
+Okay it might not be the chai/mocha style "test" (without the expect and etc) but that will be changed later!
+
+## Test 4
+
+Another unit test but this time utilising MockV3Aggregator smart contract. To test, do:
+
+```sh
+npx hardhat test --grep "MyMock"
+```
+
+[##](##) Credits
 
 https://chain.link/
 

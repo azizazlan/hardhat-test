@@ -4,7 +4,7 @@ chai.use(solidity);
 import { ethers } from 'hardhat';
 import { VRFv2Consumer } from '../../typechain';
 
-describe('VRF Integration Test', function () {
+describe('VRFv2Consumer', function () {
   let smartContractInstance: VRFv2Consumer;
 
   beforeEach(async function () {
@@ -18,7 +18,10 @@ describe('VRF Integration Test', function () {
     // Uncomment 2 lines below to request, for me it took about 5 minutes for each request!
     // const transaction = await smartContractInstance.requestRandomWords();
     // await new Promise((resolve) => setTimeout(resolve, 300000)); // 5 minutes
-    const result = await smartContractInstance.s_randomWords(1); // I did two requestRandomWords, so index 1 and 1
-    console.log(result);
+
+    const result0 = await smartContractInstance.s_randomWords(0); // two requestRandomWords, so index 0 and 1
+    console.log(result0);
+    const result1 = await smartContractInstance.s_randomWords(1);
+    console.log(result1);
   });
 });
